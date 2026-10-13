@@ -1,16 +1,19 @@
-name: Coleta yfinance Automatizada
+name: Coleta yfinance Automatizada REPO
 
 on:
   schedule:
-    # 09:15 AM BRT -> 12:15 UTC (Segunda a Sexta)
-    - cron: '15 12 * * 1-5'
-    # 19:00 PM BRT -> 22:00 UTC (Segunda a Sexta)
-    - cron: '0 22 * * 1-5'
+    - cron: '15 12 * * 1-5' # 09:15 BRT
+    - cron: '0 22 * * 1-5'  # 19:00 BRT
   workflow_dispatch: 
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    
+    # Permissão explícita de escrita no repositório para este job
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -29,8 +32,13 @@ jobs:
       - name: Executar script de coleta
         run: python main.py
 
-      - name: Salvar CSV como Artefato
-        uses: actions/upload-artifact@v4
-        with:
-          name: dados-mercado
-          path: market_data_latest.csv
+      - name: Commit e Push do CSV atualizado para o repositório
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Verifica se houve alteração no ficheiro CSV
+          git add market_data_latest.csv
+          
+          # Se não houver alterações, o commit é ignorado sem dar erro
+          git diff --quiet && git diff --cached --quiet || (git commit -m "chore: atualiza dados de mercado automatico [skip ci]" && git push)
