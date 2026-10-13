@@ -29,9 +29,8 @@ jobs:
       - name: Executar script de coleta
         run: python main.py
 
-      # ADICIONE ESTES PASSOS ABAIXO:
       - name: Salvar CSV como Artefato
         uses: actions/upload-artifact@v4
         with:
           name: dados-mercado
-          path: market_data_*.csv
+          path: market_data_latest.csv
