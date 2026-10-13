@@ -55,7 +55,8 @@ def fetch_market_data():
   if results:
     df = pd.DataFrame(results)
     # Aqui você pode salvar em CSV, enviar para um banco de dados, Telegram ou API
-    filename = f"market_data_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+    # Em vez de usar o minuto no nome do ficheiro para testes, vamos fixar um nome limpo:
+    filename = "market_data_latest.csv"
     df.to_csv(filename, index=False)
     logging.info(f"Dados salvos com sucesso em {filename}")
     print(df)
