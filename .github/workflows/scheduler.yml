@@ -6,7 +6,7 @@ on:
     - cron: '15 12 * * 1-5'
     # 19:00 PM BRT -> 22:00 UTC (Segunda a Sexta)
     - cron: '0 22 * * 1-5'
-  workflow_dispatch: # Permite executar manualmente pelo painel do GitHub
+  workflow_dispatch: 
 
 jobs:
   run-script:
@@ -28,7 +28,8 @@ jobs:
 
       - name: Executar script de coleta
         run: python main.py
-        
+
+      # ADICIONE ESTES PASSOS ABAIXO:
       - name: Salvar CSV como Artefato
         uses: actions/upload-artifact@v4
         with:
